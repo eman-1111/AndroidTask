@@ -34,6 +34,7 @@ public class PhoneContactFragment extends Fragment implements
 
     public PhoneContactFragment() {
         // Required empty public constructor
+        //todo fix runtime permission and ui
     }
 
     @Override
