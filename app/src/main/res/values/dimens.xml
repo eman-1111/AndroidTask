@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_padding">6dp</dimen>
+    <dimen name="profile_width">60dp</dimen>
+    <dimen name="profile_height">60dp</dimen>
+    <dimen name="contact_card">96dp</dimen>
+
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="small_padding">8dp</dimen>
+</resources>

@@ -5,6 +5,13 @@
     <string name="log_out">Log Out</string>
     <string name="ok">OK</string>
 
+    <string name="map">Map</string>
+    <string name="countries">Countries</string>
+    <string name="contact">Contact</string>
+    <string name="search_capitals">world\'s capital cities</string>
+    <string name="no_permission">Permission Denied</string>
+    <string name="no_permission_msg">The app can\'t function properly without the permission</string>
+
 
 
 </resources>

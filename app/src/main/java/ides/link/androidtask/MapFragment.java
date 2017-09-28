@@ -32,6 +32,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ides.link.androidtask.utilities.CommonUtilities;
 
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
@@ -40,7 +42,7 @@ import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 public class MapFragment extends Fragment implements OnMapReadyCallback,
         LocationListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
-    MapView mMapView;
+    @BindView(R.id.mapView) MapView mMapView;
     GoogleMap googleMap = null;
     boolean mLocationPermissionGranted;
     public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 99;
@@ -53,14 +55,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
-
+        ButterKnife.bind(this, view);
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
 
-        mMapView = (MapView) view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
 
@@ -101,8 +102,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                     addMarker();
                 }
             } else {
-                CommonUtilities.showPopupMessage(getActivity(), "", "");
-            }
+                CommonUtilities.showPopupMessage(getActivity(),
+                        getResources().getString(R.string.no_permission),
+                        getResources().getString(R.string.no_permission_msg));            }
         }
     }
 

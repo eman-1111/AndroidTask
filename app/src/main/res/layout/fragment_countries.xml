@@ -8,5 +8,27 @@
         android:id="@+id/countries_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+<LinearLayout
+    android:id="@+id/ln_start_search"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:textSize="24sp"
+        android:padding="@dimen/small_padding"
+        android:gravity="center"
+        android:text="@string/search_capitals"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/search"
+        android:scaleType="fitXY"/>
+</LinearLayout>
 
 </FrameLayout>

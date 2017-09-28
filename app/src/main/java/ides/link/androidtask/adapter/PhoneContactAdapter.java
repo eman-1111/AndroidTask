@@ -1,4 +1,4 @@
-package ides.link.androidtask;
+package ides.link.androidtask.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -9,6 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import ides.link.androidtask.R;
 
 /**
  * Created by Eman on 9/26/2017.
@@ -65,13 +69,12 @@ public class PhoneContactAdapter extends RecyclerView.Adapter<PhoneContactAdapte
 
     class PhoneViewHolder extends RecyclerView.ViewHolder {
 
-        TextView nameTV;
-        TextView numberTV;
+        @BindView(R.id.name_text_view)TextView nameTV;
+        @BindView(R.id.number_text_view)TextView numberTV;
 
         public PhoneViewHolder(View itemView) {
             super(itemView);
-            nameTV = (TextView) itemView.findViewById(R.id.name_text_view);
-            numberTV = (TextView) itemView.findViewById(R.id.number_text_view);
+            ButterKnife.bind(this, itemView);
         }
     }
 

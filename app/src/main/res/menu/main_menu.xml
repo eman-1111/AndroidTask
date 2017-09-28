@@ -7,6 +7,6 @@
         android:id="@+id/action_logout"
         android:orderInCategory="200"
         android:title="@string/log_out"
+        android:icon="@drawable/ic_log_out_black24dp"
         app:showAsAction="ifRoom" />
 </menu>
-    <!--android:icon="@drawable/ic_logout"-->

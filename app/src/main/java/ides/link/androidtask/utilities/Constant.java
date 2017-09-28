@@ -5,4 +5,5 @@ package ides.link.androidtask.utilities;
  */
 
 public class Constant {
+    public static final String BASE_URL_COUNTRIES = "https://restcountries.eu/";
 }

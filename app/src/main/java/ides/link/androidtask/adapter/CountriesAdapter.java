@@ -1,4 +1,4 @@
-package ides.link.androidtask;
+package ides.link.androidtask.adapter;
 
 
 import android.content.Context;
@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import ides.link.androidtask.R;
 import ides.link.androidtask.models.CountriesModel;
 
 /**
@@ -47,10 +50,10 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
     }
 
     class CountriesViewHolder extends RecyclerView.ViewHolder{
-        TextView countriesTV;
+        @BindView(R.id.Country_name_text_view)TextView countriesTV;
         public CountriesViewHolder(View itemView) {
             super(itemView);
-            countriesTV = (TextView) itemView.findViewById(R.id.Country_name_text_view);
+            ButterKnife.bind(this, itemView);
         }
     }
 

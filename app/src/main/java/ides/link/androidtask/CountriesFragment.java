@@ -2,9 +2,7 @@ package ides.link.androidtask;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,14 +13,19 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import ides.link.androidtask.adapter.CountriesAdapter;
 import ides.link.androidtask.models.CountriesModel;
 import ides.link.androidtask.network.ApiUtils;
 import ides.link.androidtask.network.AppServices;
+import ides.link.androidtask.utilities.Constant;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,20 +33,19 @@ import retrofit2.Response;
 
 public class CountriesFragment extends Fragment {
 
-    private CountriesAdapter mAdapter;
-    private RecyclerView mRecyclerView;
-    private AppServices mService;
-    private ArrayList<CountriesModel> list;
-    private ArrayList<CountriesModel> selectedList;
+
+    @BindView(R.id.countries_recycler_view)  RecyclerView mRecyclerView;
+    @BindView(R.id.ln_start_search) LinearLayout lnStartSearch;
+
+    CountriesAdapter mAdapter;
+    AppServices mService;
+    ArrayList<CountriesModel> list;
+    ArrayList<CountriesModel> selectedList;
     public static final String COUNTRIES_LIST = "countries_list";
     public static final String SELECTED_COUNTRIES_LIST = "sel_countries_list";
 
-    public static final String BASE_URL = "https://restcountries.eu/";
-
 
     public CountriesFragment() {
-        // Required empty public constructor
-        //todo fix loading and ui
     }
 
 
@@ -52,9 +54,8 @@ public class CountriesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_countries, container, false);
+        ButterKnife.bind(this, view);
 
-
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.countries_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new CountriesAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);
@@ -64,7 +65,7 @@ public class CountriesFragment extends Fragment {
             selectedList = savedInstanceState.getParcelableArrayList(SELECTED_COUNTRIES_LIST);
             mAdapter.swapData(selectedList);
         } else {
-            mService = ApiUtils.getAppService(BASE_URL);
+            mService = ApiUtils.getAppService(Constant.BASE_URL_COUNTRIES);
             loadAnswers();
         }
 
@@ -112,7 +113,9 @@ public class CountriesFragment extends Fragment {
     public void searchCountries(String query) {
         if (query.equals("") || query.length() < 2) {
             mAdapter.swapData(null);
-        }else{
+            lnStartSearch.setVisibility(View.VISIBLE);
+        } else {
+            lnStartSearch.setVisibility(View.GONE);
             selectedList = new ArrayList<CountriesModel>();
             Pattern pattern = Pattern.compile(query, Pattern.CASE_INSENSITIVE);
             for (CountriesModel curVal : list) {
