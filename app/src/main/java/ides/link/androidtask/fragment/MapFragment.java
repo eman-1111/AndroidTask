@@ -1,4 +1,4 @@
-package ides.link.androidtask;
+package ides.link.androidtask.fragment;
 
 
 import android.Manifest;
@@ -34,6 +34,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ides.link.androidtask.R;
 import ides.link.androidtask.utilities.CommonUtilities;
 
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
@@ -42,7 +43,8 @@ import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 public class MapFragment extends Fragment implements OnMapReadyCallback,
         LocationListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
-    @BindView(R.id.mapView) MapView mMapView;
+    @BindView(R.id.mapView)
+    MapView mMapView;
     GoogleMap googleMap = null;
     boolean mLocationPermissionGranted;
     public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 99;
@@ -97,14 +99,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             if (permissions[0].equals(Manifest.permission.ACCESS_COARSE_LOCATION)
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 mLocationPermissionGranted = true;
-                mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                if (googleMap != null) {
-                    addMarker();
-                }
+                getLocation();
             } else {
                 CommonUtilities.showPopupMessage(getActivity(),
                         getResources().getString(R.string.no_permission),
-                        getResources().getString(R.string.no_permission_msg));            }
+                        getResources().getString(R.string.no_permission_msg));
+            }
         }
     }
 
@@ -149,7 +149,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                 if (position.latitude != mLastLocation.getLatitude()) {
                     String uri = "http://maps.google.com/maps?saddr=" +
                             mLastLocation.getLatitude() + "," + mLastLocation.getLongitude() + "&daddr=" +
-                            position.latitude + "," + position.latitude + "&mode=driving";
+                            position.latitude + "," + position.longitude + "&mode=driving";
 
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                     intent.setPackage("com.google.android.apps.maps");
@@ -164,7 +164,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
+        getLocation();
+    }
+    public void getLocation(){
         if (checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -173,14 +175,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         } else {
             mLocationPermissionGranted = true;
         }
-
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (googleMap != null) {
-            if (mLocationPermissionGranted) {
-                addMarker();
+       mLastLocation= LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mLastLocation != null) {
+            if (googleMap != null) {
+                if (mLocationPermissionGranted) {
+                    addMarker();
+                }
             }
         }
-
 
     }
 

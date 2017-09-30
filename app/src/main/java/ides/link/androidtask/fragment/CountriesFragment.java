@@ -1,4 +1,4 @@
-package ides.link.androidtask;
+package ides.link.androidtask.fragment;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -21,10 +21,12 @@ import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ides.link.androidtask.R;
 import ides.link.androidtask.adapter.CountriesAdapter;
 import ides.link.androidtask.models.CountriesModel;
 import ides.link.androidtask.network.ApiUtils;
 import ides.link.androidtask.network.AppServices;
+import ides.link.androidtask.utilities.CommonUtilities;
 import ides.link.androidtask.utilities.Constant;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,7 +38,7 @@ public class CountriesFragment extends Fragment {
 
     @BindView(R.id.countries_recycler_view)  RecyclerView mRecyclerView;
     @BindView(R.id.ln_start_search) LinearLayout lnStartSearch;
-
+    private static final String TAG = CountriesFragment.class.getSimpleName();
     CountriesAdapter mAdapter;
     AppServices mService;
     ArrayList<CountriesModel> list;
@@ -65,7 +67,8 @@ public class CountriesFragment extends Fragment {
             selectedList = savedInstanceState.getParcelableArrayList(SELECTED_COUNTRIES_LIST);
             mAdapter.swapData(selectedList);
         } else {
-            mService = ApiUtils.getAppService(Constant.BASE_URL_COUNTRIES);
+            mService = ApiUtils.getAppService();
+
             loadAnswers();
         }
 
@@ -130,7 +133,7 @@ public class CountriesFragment extends Fragment {
     }
 
     public void loadAnswers() {
-        mService.getCountries().enqueue(new Callback<List<CountriesModel>>() {
+        mService.getCountries(Constant.BASE_URL_COUNTRIES).enqueue(new Callback<List<CountriesModel>>() {
             @Override
             public void onResponse(Call<List<CountriesModel>> call, Response<List<CountriesModel>> response) {
 
@@ -139,14 +142,14 @@ public class CountriesFragment extends Fragment {
 
                 } else {
                     int statusCode = response.code();
-                    Log.d("MainActivity", "error" + statusCode);
+                    Log.d(TAG, "error" + statusCode);
                 }
             }
 
             @Override
             public void onFailure(Call<List<CountriesModel>> call, Throwable t) {
 
-                Log.d("MainActivity", "error loading from API");
+                Log.d(TAG, "error loading from API");
 
             }
         });

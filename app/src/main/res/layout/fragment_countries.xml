@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ides.link.androidtask.CountriesFragment">
+    tools:context="ides.link.androidtask.fragment.CountriesFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/countries_recycler_view"
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-black"
-        android:textSize="24sp"
+        android:textSize="21sp"
         android:padding="@dimen/small_padding"
         android:gravity="center"
         android:text="@string/search_capitals"/>

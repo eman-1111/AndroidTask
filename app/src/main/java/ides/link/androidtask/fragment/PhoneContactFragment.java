@@ -1,4 +1,4 @@
-package ides.link.androidtask;
+package ides.link.androidtask.fragment;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -21,6 +21,7 @@ import android.provider.ContactsContract.Contacts;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ides.link.androidtask.R;
 import ides.link.androidtask.adapter.PhoneContactAdapter;
 import ides.link.androidtask.utilities.CommonUtilities;
 

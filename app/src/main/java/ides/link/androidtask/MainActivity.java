@@ -1,5 +1,7 @@
 package ides.link.androidtask;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +13,10 @@ import android.view.MenuItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ides.link.androidtask.fragment.CountriesFragment;
+import ides.link.androidtask.fragment.MapFragment;
+import ides.link.androidtask.fragment.PhoneContactFragment;
+import ides.link.androidtask.utilities.Constant;
 import ides.link.androidtask.utilities.ViewPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,11 +39,9 @@ public class MainActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-
         MapFragment mapFragment = new MapFragment();
         PhoneContactFragment phoneContactFragment = new PhoneContactFragment();
         CountriesFragment countriesFragment = new CountriesFragment();
-
 
         adapter.addFragment(mapFragment, getResources().getString(R.string.map));
         adapter.addFragment(countriesFragment, getResources().getString(R.string.countries));
@@ -56,9 +60,17 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_logout) {
-
+            userLogOut();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    private void userLogOut() {
+        SharedPreferences.Editor editor = getSharedPreferences(Constant.MY_PREFS_NAME, MODE_PRIVATE).edit();
+        editor.putString(Constant.USER_NAME, "");
+        editor.putString(Constant.USER_PASSWORD, "");
+        editor.apply();
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
     }
 }

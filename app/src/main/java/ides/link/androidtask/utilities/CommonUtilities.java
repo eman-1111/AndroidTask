@@ -2,11 +2,13 @@ package ides.link.androidtask.utilities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import ides.link.androidtask.LoginActivity;
 import ides.link.androidtask.R;
 
 /**
@@ -19,12 +21,27 @@ public class CommonUtilities {
     /*
     * Check if String is Null/empty or not
     */
-    public static boolean isNullString(String str) {
-        if (str != null && str.compareToIgnoreCase("null") != 0 && str.trim().length() > 0)
+    public static boolean validateUserName(String str) {
+        if (str.isEmpty() || str.length() < 2)
             return false;
 
         return true;
     }
+
+    public static boolean validateEmail(String str) {
+        if (str.isEmpty() || android.util.Patterns.EMAIL_ADDRESS.matcher(str).matches()) {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean validatePassword(String str) {
+        if (str.isEmpty() || str.length() < 2 ) {
+            return false;
+        }
+        return true;
+    }
+
 
     public static void showPopupMessage(final Activity activity, String title, String msg) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -33,7 +50,7 @@ public class CommonUtilities {
         builder.setNegativeButton(activity.getString(R.string.ok), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 //do things
-                activity.finish();
+                dialog.dismiss();
             }
         });
         builder.show();
@@ -57,5 +74,6 @@ public class CommonUtilities {
         }
         return dist;
     }
+
 
 }
