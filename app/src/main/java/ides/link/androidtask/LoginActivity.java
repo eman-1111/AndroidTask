@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -68,13 +69,14 @@ public class LoginActivity extends AppCompatActivity {
         mService = ApiUtils.getAppService();
         ButterKnife.bind(this);
         intitFaceBook();
+        CommonUtilities.isDeviceOnline(findViewById(android.R.id.content), this);
 
     }
 
 
     @OnClick(R.id.btn_login)
     public void loginAction(View view) {
-        validate();
+        validateUserData();
     }
 
     @OnClick(R.id.link_register)
@@ -89,7 +91,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<UserResult> call, Response<UserResult> response) {
                 if (response.isSuccessful()) {
+
                     UserResult userResult = response.body();
+                    //if service is successful save user and go to main activity
+                    Log.e(TAG, userResult.getSuccess() +userResult.getId() );
                     if (userResult.getSuccess().equals("ok")) {
                         saveUserData(userName, password);
                         hideProgressDialog();
@@ -103,14 +108,23 @@ public class LoginActivity extends AppCompatActivity {
                         startRegisterFacebookService(faceName, userName, password, faceEmail, faceGender);
                     }
 
+                    if (userResult.getSuccess().equals("error")) {
+                        hideProgressDialog();
+                        Snackbar.make(findViewById(android.R.id.content), getString(R.string.login_error),
+                                Snackbar.LENGTH_LONG).show();
+                    }
+
+
                 } else {
                     int statusCode = response.code();
                     Log.d(TAG, "error" + statusCode);
+                    hideProgressDialog();
                 }
             }
 
             @Override
             public void onFailure(Call<UserResult> call, Throwable t) {
+                hideProgressDialog();
                 Log.d(TAG, "error loading from API");
 
             }
@@ -126,9 +140,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void validate() {
+    public void validateUserData() {
+        // keep track of data validation
         boolean valid = true;
-
         String userName = userNameText.getText().toString();
         String password = passwordText.getText().toString();
 
@@ -139,14 +153,13 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             userNameText.setError(null);
         }
-
         if (!CommonUtilities.validatePassword(password)) {
             passwordText.setError(getResources().getString(R.string.password_error));
             valid = false;
         } else {
             passwordText.setError(null);
         }
-
+        // if data is valid start login service
         if (valid) {
             startLoginService(userName, password);
         }
@@ -224,6 +237,7 @@ public class LoginActivity extends AppCompatActivity {
         faceGender = 0;
         if (user.optString("gender").toString().equals("female"))
             faceGender = 1;
+
         Log.i(TAG, "name " + faceName + " first_name " + first_name +
                 " email " + faceEmail + " gender" + faceGender);
 
@@ -253,6 +267,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 } else {
                     int statusCode = response.code();
+                    hideProgressDialog();
                     Log.d(TAG, "error" + statusCode);
                 }
 
@@ -261,7 +276,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<UserResult> call, Throwable t) {
                 Log.d(TAG, "error loading from API");
-
+                hideProgressDialog();
             }
         });
     }

@@ -52,9 +52,7 @@ public class SplashActivity extends AppCompatActivity {
         if (!userName.equals("")) {
             startLoginService(userName, password);
         } else {
-            Intent mainIntent = new Intent(SplashActivity.this, LoginActivity.class);
-            SplashActivity.this.startActivity(mainIntent);
-            SplashActivity.this.finish();
+            openActivity(LoginActivity.class);
         }
 
 
@@ -66,26 +64,32 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<UserResult> call, Response<UserResult> response) {
                 if (response.isSuccessful()) {
-                    Log.e(TAG, userName + password + "startLoginService ");
+
                     UserResult userResult = response.body();
                     if (userResult.getSuccess().equals("ok")) {
-                        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        SplashActivity.this.finish();
-                    }
 
+                        openActivity(MainActivity.class);
+                    }
                 } else {
                     int statusCode = response.code();
                     Log.d(TAG, "error" + statusCode);
+                    openActivity(LoginActivity.class);
                 }
             }
-
             @Override
             public void onFailure(Call<UserResult> call, Throwable t) {
                 Log.d(TAG, "error loading from API");
+                openActivity(LoginActivity.class);
 
             }
         });
     }
+
+    private void openActivity(Class mainActivityClass) {
+        Intent intent = new Intent(SplashActivity.this, mainActivityClass);
+        startActivity(intent);
+        SplashActivity.this.finish();
+    }
+
 
 }

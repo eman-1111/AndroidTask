@@ -61,7 +61,7 @@ public class CountriesFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new CountriesAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);
-
+        list = new ArrayList<CountriesModel>();
         if (savedInstanceState != null) {
             list = savedInstanceState.getParcelableArrayList(COUNTRIES_LIST);
             selectedList = savedInstanceState.getParcelableArrayList(SELECTED_COUNTRIES_LIST);
@@ -114,7 +114,7 @@ public class CountriesFragment extends Fragment {
 
 
     public void searchCountries(String query) {
-        if (query.equals("") || query.length() < 2) {
+        if (query.equals("") || query.length() < 2 || list.size() <= 0) {
             mAdapter.swapData(null);
             lnStartSearch.setVisibility(View.VISIBLE);
         } else {

@@ -23,11 +23,12 @@
     <string name="radio_male">Male</string>
     <string name="radio_female">Female</string>
 
-    <string name="password_error">more than 2 alphanumeric characters</string>
+    <string name="password_error">Enter a valid password more than 2 alphanumeric characters</string>
     <string name="user_name_error">Enter a valid user name</string>
     <string name="name_error">Enter a valid  name</string>
     <string name="email_error">Enter a valid email address</string>
-
+    <string name="network">No network connection available.</string>
+    <string name="login_error">Incorrect username or password</string>
     <string name="loading">Loading....</string>
 
     <string name="facebook_app_id">1950937755160091</string>

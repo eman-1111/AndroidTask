@@ -3,8 +3,13 @@ package ides.link.androidtask.utilities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -74,6 +79,17 @@ public class CommonUtilities {
         }
         return dist;
     }
+    public static boolean isDeviceOnline(View view ,Context context) {
+        ConnectivityManager connMgr =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        boolean connected =  (networkInfo != null && networkInfo.isConnected());
+        if(!connected){
+        Snackbar.make(view, context.getString(R.string.network),
+                Snackbar.LENGTH_LONG).show();}
+        return connected;
+    }
+
 
 
 }

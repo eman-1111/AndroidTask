@@ -39,8 +39,6 @@ public class RegisterActivity extends AppCompatActivity {
     @BindView(R.id.btn_register)
     Button registerButton;
 
-    String name, userName, password, email, mobile;
-    int gender = 0;
     ProgressDialog progressDialog;
     AppServices mService;
     private static final String TAG = LoginActivity.class.getSimpleName();
@@ -49,21 +47,19 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        mService = ApiUtils.getAppService();
         ButterKnife.bind(this);
+        CommonUtilities.isDeviceOnline(findViewById(android.R.id.content) ,this);
     }
 
     @OnClick(R.id.btn_register)
     public void registerAction(View view) {
-
-        if (validate()) {
-            showProgressDialog();
-            mService = ApiUtils.getAppService();
-            startRegisterService();
-        }
-
+       validateUserData();
     }
 
-    private void startRegisterService() {
+    private void startRegisterService(String name,String userName,String password,
+                                      String email,int gender,String mobile) {
+        showProgressDialog();
         mService.getRegister(name, userName, password, email, gender, mobile).enqueue(new Callback<UserResult>() {
             @Override
             public void onResponse(Call<UserResult> call, Response<UserResult> response) {
@@ -91,19 +87,20 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    public boolean validate() {
+    public void validateUserData() {
         boolean valid = true;
 
-        name = passwordText.getText().toString();
-        userName = userNameText.getText().toString();
-        password = passwordText.getText().toString();
-        email = passwordText.getText().toString();
-        mobile = passwordText.getText().toString();
+        String name = passwordText.getText().toString();
+        String userName = userNameText.getText().toString();
+        String password = passwordText.getText().toString();
+        String email = passwordText.getText().toString();
+        String mobile = passwordText.getText().toString();
 
         int selectedId = genderRadio.getCheckedRadioButtonId();
         RadioButton radioGenderButton = (RadioButton) findViewById(selectedId);
+        int gender = 0;
         if (radioGenderButton.getText().equals(getResources().getString(R.string.radio_female))) {
-            gender = 1;
+             gender = 1;
         }
         if (!CommonUtilities.validateUserName(name)) {
             nameText.setError(getResources().getString(R.string.name_error));
@@ -132,8 +129,12 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             mailText.setError(null);
         }
+        if (valid) {
+            startRegisterService(name, userName, password,email, gender, mobile);
+        }
 
-        return valid;
+
+
     }
 
 

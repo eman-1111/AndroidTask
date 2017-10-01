@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -108,24 +109,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-
-        if (mLocationPermissionGranted) {
-            googleMap.clear();
-            mLastLocation = location;
-            addMarker();
-        }
-
-    }
-
 
     private void addMarker() {
 
         LatLng currentLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
         googleMap.addMarker(new MarkerOptions()
-                .position(currentLocation).title("Home Title")
-                .snippet("Marker Description")
+                .position(currentLocation).title("Home")
+                .snippet("Current location")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
         CameraPosition cameraPosition = new CameraPosition.Builder().target(currentLocation).zoom(12).build();
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -166,7 +156,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     public void onConnected(@Nullable Bundle bundle) {
         getLocation();
     }
-    public void getLocation(){
+
+    public void getLocation() {
         if (checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -175,13 +166,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         } else {
             mLocationPermissionGranted = true;
         }
-       mLastLocation= LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        LocationRequest mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        mLocationRequest.setInterval(1000);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest,
+                this);
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
             if (googleMap != null) {
                 if (mLocationPermissionGranted) {
                     addMarker();
                 }
             }
+        }
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (mLocationPermissionGranted) {
+            googleMap.clear();
+            mLastLocation = location;
+            addMarker();
         }
 
     }

@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import ides.link.androidtask.fragment.CountriesFragment;
 import ides.link.androidtask.fragment.MapFragment;
 import ides.link.androidtask.fragment.PhoneContactFragment;
+import ides.link.androidtask.utilities.CommonUtilities;
 import ides.link.androidtask.utilities.Constant;
 import ides.link.androidtask.utilities.ViewPagerAdapter;
 
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
+
+        CommonUtilities.isDeviceOnline(viewPager ,this);
     }
 
     private void setupViewPager(ViewPager viewPager) {
